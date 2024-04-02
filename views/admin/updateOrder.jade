@@ -1,0 +1,68 @@
+extends admin
+
+block details
+    .row
+        .col-sm-8
+            h5 Información de la orden
+                .table-responsive.cart_info
+                    table.content-table
+                        thead
+                            tr.cart_menu
+                                td.image
+                                td.description Producto
+                                td.price Precio Unitario
+                                td.quantity Cantidad
+                                td.total Total
+                        tbody
+                            each product in products
+                                -var quantity = product.Quantity;
+                                -var name = product.ProductName;
+                                -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug;
+                                -var unitPrice = product.ProductPrice;
+                                -var productTotal = product.Total;
+                                tr
+                                    td.cart_product
+                                        a(href=productLink)
+                                            img(src=product.Image, alt=name)
+                                    td.cart_description
+                                        h4
+                                            a(href=productLink)= name
+                                        p= product.Description
+                                    td.cart_price
+                                        p= ' $' + unitPrice
+                                    td.cart_quantity
+                                        p=quantity
+                                    td.cart_total
+                                        p.cart_total_price= ' $' + productTotal
+               
+
+    .row
+        .col-sm-6
+            h3= 'Actualizar Estatus de Orden #' + order.OrderID
+            form(id='updateStatus', action='/admin//orders/' + order.OrderID + '/update', method='POST')
+                select(id='status', name='status')
+                    option(value='Order Received', selected) Order Received
+                    option(value='Processing') Processing
+                    option(value='Processed') Processed
+                    option(value='Delivered') Delivered
+                br
+                button.btn.btn-default(type='submit') Actualizar estatus
+        .col-sm-6
+            .table-responsive.cart_info
+                table.content-table
+                    thead
+                        tr.cart_menu
+                            td(colspan=2) Resumen de orden
+
+                    tbody
+                        tr
+                            td Sub Total
+                            td= ' $' + order.SubTotal
+                        tr
+                            td Descuento
+                            td= ' $' + order.Discount
+                        
+                        tr
+                            td Total
+                            td
+                                span= ' $' + order.Total

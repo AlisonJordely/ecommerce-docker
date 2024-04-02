@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+    section
+        .container
+            .row
+                h2.title.text-center
+                    i.fa.fa-user
+                    |  Perfil
+                //title here. no duplicate
+                //if navList
+                .col-sm-2
+                    // nav-bar
+                    .left-sidebar
+                        #accordian.panel-group.category-products
+                            .panel.panel-default
+                                .panel-heading
+                                    h4.panel-title
+                                        a(href='/usr/' + customer.Username) Información personal
+                            .panel.panel-default
+                                .panel-heading
+                                    h4.panel-title
+                                        a(href='/usr/' + customer.Username + '/orders') Ordenes
+                            
+                    ///nav-bar
+                .col-sm-10
+                    .blog-post-area
+                        .single-blog-post
+                            block details

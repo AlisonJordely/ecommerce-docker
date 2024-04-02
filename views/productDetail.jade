@@ -1,0 +1,131 @@
+extends layout
+
+block content
+
+    
+    button.botonRegresar(onclick="window.history.back();" style='margin-left: 30px; display: inline;  text-align: left;')
+                        i.fa.fa-arrow-left
+    
+
+    section
+        .container
+            .row
+                
+                
+                if product
+                    // product-details
+                    .product-details
+                        
+                        //product-image
+                        .col-sm-5
+                            .view-product
+                                img(src=product.Image, alt=product.ProductName)
+                                if (WhislistCount.WhislistCount < 1)
+                                    form(action='/wishlist/' + product.ProductID + '/add', method='POST')
+                                        button.botonWishlist(type='submit', onclick="addToWishlist()")
+                                            i.fa.fa-heart
+                                else 
+                                    form(action='/wishlist/' + product.ProductID + '/deleteSweetAlert', method='POST')
+                                        button.botonWishlist(type='submit', style="background-color: #005A9C; color: white;", onclick="removeFromWishlist()")
+                                            i.fa.fa-heart
+                                
+                        ///product-image
+
+                        //product-information
+                        .col-sm-7
+                            .product-information
+                                //img.newarrival(src='/img/product-details/new.jpg', alt='')
+                                h2= product.ProductName
+
+                                p= product.ProductDescription
+
+                                - var availability = 'En Stock (' + product.UnitsInStock + ' unidades)'
+                                if product.UnitsInStock < 1
+                                    - availability = 'Agotado por el momento'
+
+                                p
+                                    b Descripción:
+                                    = ' ' + product.Description
+                                br
+                                p
+                                    b Plataforma:
+                                    = ' ' + product.CategoryName
+
+                                p
+                                    b Disponibilidad:
+                                    = ' ' + availability
+                                p
+                                    b Año de lanzamiento:
+                                    = ' ' + product.ManufactureYear
+
+                                if product.UnitsInStock > 0 
+                                    if product.Feature > 0 
+                                        span
+                                            span= ' MX$' + product.ProductPrice
+                                            form(action='/cart/' + product.ProductID + '/add', method='POST')
+                                                label Cantidad:
+                                                    input(type='number', name='quantity',id="xd3", onchange="myFunction(this.value)",  value='1', min="1", max=product.UnitsInStock)
+                                                br
+                                                button.btn.btn-default.add-to-cart(type='submit', onclick="addToCart()")
+                                                    i.fa.fa-shopping-cart
+                                                    |          Añadir al carrito
+                                            form(action='/cart/' + product.ProductID + '/buy-directly', method='POST')
+                                                input(type='number', name='quantity',id="xd4", value='1', min="1", max=product.UnitsInStock, style="display: none;")
+                                                button.btn.btn-default.add-to-wishlist(type='submit', style="width: 150px;")
+                                                    i.fa.fa-arrow-right
+                                                    |          Comprar ahora    
+                                        br
+        br
+        br
+    br
+    br
+
+                
+                                
+                                
+    script(type='text/javascript').
+        function myFunction(val) {
+            //- alert("The input value has changed. The new value is: " + val);
+            document.getElementById("xd4").value = val;
+        }
+
+        function addToWishlist() {
+            Swal.fire({
+                title:'Lista de deseos',
+                text: 'Has añadido este Producto a tu Lista de deseos',
+                icon:'success',
+                customClass: 'swal-wide',
+                confirmButtonColor: '#005A9C',
+                footer: '<a href="/wishlist">Ir a mi Lista de deseos</a>'
+            }).then((result) => {
+                location.reload();
+            })
+            
+        }
+
+        function removeFromWishlist() {
+            Swal.fire({
+                title:'Lista de deseos',
+                text: 'Has eliminado este Producto de tu Lista de deseos',
+                confirmButtonColor: '#005A9C',
+                icon:'error',
+                footer: '<a href="/wishlist">Ir a mi Lista de deseos</a>'
+            }).then((result) => {
+                location.reload();
+            });
+        }
+
+        function addToCart() {
+            Swal.fire({
+                title:'Carrito de compras',
+                text: 'Has añadido este Producto a tu Carrito de compras',
+                confirmButtonColor: '#005A9C',
+                icon:'success',
+                customClass: 'swal-wide',
+                footer: '<a href="/cart">Ir a mi Carrito de compras</a>'
+            }).then((result) => {
+                location.reload();
+            })
+            
+        }
+

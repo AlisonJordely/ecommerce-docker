@@ -1,0 +1,33 @@
+extends layout
+
+block content
+    
+
+
+    section
+
+        .container
+            .row    
+                .features_items
+
+                                       
+                        br
+
+                        
+                        h2.title.text-center Productos
+                        if featProducts
+                            each product in featProducts
+                                - var productUrl = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
+                                .col-sm-3
+                                    .product-image-wrapper
+                                        .single-products
+                                            .productinfo.text-center
+                                                .productimg
+                                                    a(href=productUrl)
+                                                        figure
+                                                            img(src=product.Image, alt=product.ProductName)
+                                                            figcaption= product.ProductName
+                                                    p
+                                                        a(href=productUrl)=product.ProductName
+                                                    h2= ' MX$' + product.ProductPrice
+           

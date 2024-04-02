@@ -1,0 +1,33 @@
+extends admin
+
+block details
+    .row
+        form(action='/admin/cat/add', method='GET')
+            button.btn.btn-default(type='submit', class="btn btn-success")
+                i.fa.fa-plus
+                = ' Añadir nueva categoría'
+        br
+        .features_items
+            if categories
+                each category in categories
+                    .row
+                        .col-sm-4
+                            .product-image-wrapper
+                                .single-products
+                                    .productCat.text-center
+                                        img(src=category.Image, alt=category.CategoryName)
+                        .col-sm-4 
+                                h2.cat=category.CategoryName
+                                p=category.Description
+                        .col-sm-4
+                                form.dev-form(action='/admin/cat/' + category.CategoryID + '/edit', method='GET')
+                                    button.btn.btn-default(type='submit', class="btn btn-info")
+                                        i.fa.fa-edit
+                                        = ' Editar'
+
+                                form.dev-form(action='/admin/cat/' + category.CategoryID + '/delete', method='POST')
+                                    button.btn.btn-default(type='submit', class="btn btn-danger")
+                                        i.fa.fa-trash-o
+                                        = ' Eliminar'
+        br
+        br

@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+
+    h2.title.text-center
+                    | Seleccionar método de pago
+    p ¿El método de pago que desea utilizar se muestra a continuación?
+                        | Si es así, haga clic en el botón "Seleccionar este método de pago" correspondiente.
+                        br
+                        | También puede Añadir un nuevo método de pago.
+
+
+    form(action='/usr/' + customer.Username + '/addresses/add', method='GET')
+        button.btn.btn-default(type='submit' class="btn btn-success")
+            i.fa.fa-plus
+            = ' Añadir un nuevo método de pago'
+    br
+
+    table.content-table
+        thead
+            tr
+                td Nombre del titular
+                td Número de la tarjeta
+                td Mes de expiración
+                td Año de expiración  
+                td CVV
+                td
+
+        tbody
+            each address in addresses
+                tr
+                    td= address.FullName
+                    td= address.StreetAddress
+                    td= address.PostCode
+                    td= address.City
+                    td= "***"
+                    td
+                        form(action='/checkout/delivery/' + address.AddressID, method='POST')
+                                input.dev-btn.btn.btn-default.add-to-cart(type='submit', value='Seleccionar este método de pago')
+
+

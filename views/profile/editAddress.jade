@@ -1,0 +1,38 @@
+extends info
+
+block details
+    section#form
+        //form
+
+        .container
+                .center-login
+                    h1 Editar Método de pago
+
+                    form(action='/usr/' + customer.Username + '/addresses/' + address.AddressID + '/edit', method='POST')
+                        .txt_field
+                            input(type='text', id='fullName', name='fullName', value=address.FullName, required=true)
+                            span
+                            label Nombre del titular
+                        .txt_field
+                            input(type='text', id='address', name='streetAddress', value=address.StreetAddress, required=true)
+                            span
+                            label Número de la tarjeta
+                        .txt_field
+                            input(type='text', id='postcode', name='postcode', value=address.PostCode, required=true)
+                            span
+                            label Mes de expiración
+                        .txt_field
+                            input(type='text', id='city', name='city', value=address.City, required=true)
+                            span
+                            label Año de expiración
+                        .txt_field  
+                            input(type='text', id='country', name='country', value=address.Country, required=true)
+                            span
+                            label CVV
+                        input(type='submit', value='Actualizar Dirección')
+                        br
+                        br
+
+
+
+    

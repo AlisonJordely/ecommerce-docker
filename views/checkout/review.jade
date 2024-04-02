@@ -1,0 +1,82 @@
+extends ../layout
+
+block content
+    button.botonRegresar(onclick="window.history.back();")
+                        i.fa.fa-arrow-left
+    h2.title.text-center
+        i.fa.fa-shopping-cart
+        |     Finalizar compra
+
+    table.content-table
+        thead
+            tr
+                td.image
+                td.description Producto
+                td.price Precio Unitario
+                td.quantity Cantidad
+                td.total Total
+        tbody
+            if cart
+                each item in cart
+                    -var quantity = item.quantity;
+                    if quantity > 0
+                        -var name = item.ProductName;
+                        -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug + '/' + item.ProductID;
+                        -var unitPrice = item.ProductPrice;
+                        -var productTotal = item.productTotal;
+                        tr
+                            td.cart_product
+                                a(href=productLink)
+                                    img(src=item.Image, alt=name)
+                            td.cart_description
+                                h4
+                                    a(href=productLink)= name
+                                p= item.Description
+                            td(style='color: #85BB65;').cart_price
+                                p= ' $' + unitPrice
+                            td.cart_quantity
+                                p=quantity
+                            td(style='color: #85BB65;').cart_total
+                                p.cart_total_price= ' $' + productTotal
+
+                //- tr
+                //-     td(colspan='4')
+                //-     td.cart_quantity
+                //-         a.btn.btn-default.add-to-cart(href='/cart') Editar Carrito
+
+
+    
+
+    section#cart_items
+        .container
+            .row
+                .table-responsive.cart_info
+
+
+                    if summary
+                        table.table.table-condensed.total-result
+                            thead
+                                tr.cart_menu
+                                    td(colspan=2) Resumen de compra
+
+                            tbody
+                                tr
+                                    td Sub Total
+                                    td(style='color: #85BB65;')= ' $' + summary.subTotal
+                                tr
+                                    td Descuento
+                                    td(style='color: red;')= ' $' + summary.discount
+                                tr
+                                    td Total
+                                    td(style='color: #85BB65;')
+                                        span= ' $' + summary.total
+
+                            
+                                tr
+                                    
+                                    td(colspan=2).text-right
+                                        form(action='/create-checkout-session', method='POST')
+                                            button.btn.btn-default.add-to-cart(type='submit') Confirmar Orden
+                                            
+
+

@@ -1,0 +1,62 @@
+extends admin
+
+block details
+
+    .table-responsive
+        table.content-table
+            thead
+                tr
+                    th(colspan='7') Usuarios registrados
+            thead
+                tr
+                    td #
+                    td Nombre
+                    td Email
+                    td Usuario
+                    td Admin
+                    td(colspan="2") Acciones
+            tbody
+                each customer in customers
+                    tr
+                        td= customer.UserID
+                        td= customer.FullName
+                        td= customer.Email
+                        td= customer.Username
+                        td
+                            - var admin = 'Si'
+                            if customer.Admin == 0
+                                - admin = 'No'
+                            = admin
+                        //td
+                            a.btn.btn-default(href='/admin/customers/' + customer.UserID)
+                                i.fa.fa-eye
+                                = ' View'
+                        td
+                            if customer.Admin == 0
+                                form.dev-form(action='/admin/customers/' + customer.UserID + '/makeAdmin', method='POST')
+                                    button.cus-btn.btn.btn-default(type='submit', class="btn btn-success")
+                                        i.fa.fa-unlock
+                                        = ' Convertir en Admin'
+                            else
+                                form.dev-form(action='/admin/customers/' + customer.UserID + '/removeAdmin', method='POST')
+                                    button.cus-btn.btn.btn-default(type='submit', class="btn btn-warning")
+                                        i.fa.fa-lock
+                                        = ' Revocar Admin'
+                        td
+                            if customer.UserID != user.UserID
+                                form.dev-form(action='/admin/customers/' + customer.UserID + '/delete', method='POST')
+                                    button.cus-btn.btn.btn-default(type='submit', class="btn btn-danger")
+                                        i.fa.fa-trash-o
+                                        = ' Eliminar'
+
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+
+        //- alert errores
+        var MessageError = document.getElementById("MessageError").textContent;
+        console.log(document.getElementById("MessageError").textContent); 
+        if (MessageError != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Datos invalidos',
+                        text: MessageError});
+        }                        

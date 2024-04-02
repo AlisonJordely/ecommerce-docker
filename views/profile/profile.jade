@@ -1,0 +1,36 @@
+extends info
+
+block details
+
+
+    table.content-table
+      thead
+        tr
+          th(colspan='2') Información personal
+      tbody
+        tr.active-row
+            td Nombre
+            td= customer.FullName
+        tr.active-row
+            td Celular
+            td= customer.Phone
+        tr
+            td Email
+            td= customer.Email
+        tr.active-row
+            td Usuario
+            td= customer.Username
+    
+    form.dev-form(action='/usr/' + customer.Username + '/edit', method='GET')
+        button.btn.btn-default.add-to-cart(type='submit' class="btn")
+            i.fa.fa-edit
+            = ' Editar Información'
+
+    form.dev-form(action='/usr/' + customer.Username + '/change-password', method='GET')
+        button.btn.btn-default.add-to-wishlist(type='submit')
+            i.fa.fa-key
+            = ' Cambiar contraseña'
+
+    br
+    br
+    br

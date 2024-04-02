@@ -1,0 +1,35 @@
+extends info
+
+block details
+    section#form
+        //form
+
+        .container
+                    
+            .center-login
+                h1 Añadir un nuevo método de pago
+
+                form(action='/usr/' + customer.Username + '/addresses/add', method='POST')
+                    .txt_field
+                        input(type='text', id='fullName', name='fullName', required=true)
+                        span
+                        label Nombre del titular
+                    .txt_field
+                        input(type='text', id='address', name='streetAddress', required=true)
+                        span
+                        label Número de la tarjeta
+                    .txt_field
+                        input(type='text', id='postcode', name='postcode', maxlength="5", required=true)
+                        span
+                        label Mes de expiración
+                    .txt_field
+                        input(type='text', id='city', name='city', required=true)
+                        span
+                        label Año de expiración
+                    .txt_field
+                        input(type='text', id='country', name='country', required=true)
+                        span
+                        label CVV
+                    input(type='submit', value='Añadir método de pago')
+                    br
+                    br

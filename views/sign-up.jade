@@ -1,0 +1,136 @@
+extends layout
+
+block content
+    section#form
+        //form
+
+        .container
+                    if checkOutNoti
+                            if (signUpError != '')
+                                p=signUpError+"xd1"
+                            else
+                                p=checkOutNoti+"xd2"
+                        else
+                            if (signUpError != '')
+                                p(id="MessageError", value=signUpError, style="display: none;")=signUpError
+                    .center-login
+                        h1 Regístrate en Ecommerce
+
+                        form(id='sign-up', action='/sign-up', method='POST', onsubmit = "return(validate());")
+                            .txt_field
+                                input(type='text', name='fullName', id = "xd")
+                                span
+                                label Nombre completo
+                            p(id="errorNombre" style="color: #d9534f; display: none;")
+                            .txt_field
+                                input(type='text', name='email')
+                                span
+                                label Email
+                            p(id="errorEmail" style="color: #d9534f; display: none;")
+                            .txt_field
+                                input(type='text', name='phone')
+                                span
+                                label Celular
+                            p(id="errorCelular" style="color: #d9534f; display: none;")
+                            .txt_field
+                                input(type='text', name='username')
+                                span
+                                label Usuario
+                            p(id="errorUsuario" style="color: #d9534f; display: none;")
+                            .txt_field
+                                input(type='password', name='password')
+                                span
+                                label Contraseña
+                            p(id="errorPassword" style="color: #d9534f; display: none;")
+                            .txt_field
+                                input(type='password', name='rePassword')
+                                span
+                                label Confirmar Contraseña
+                            p(id="errorConfirmPassword" style="color: #d9534f; display: none;")
+                            input(type='submit', value='Regístrate')
+                            .signup_link
+                                | ¿Ya tienes una cuenta? 
+                                a(href='/sign-in') Inicia Sesión en Ecommerce
+                                br
+                                br
+
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+
+        //- alert errores
+        var MessageError = document.getElementById("MessageError").textContent;
+        console.log(document.getElementById("MessageError").textContent); 
+        if (MessageError != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Datos invalidos',
+                        text: MessageError});
+        }
+
+        // validacion de form
+        function validate() {
+            
+            var fullName = document.forms["sign-up"]["fullName"].value;
+            var email = document.forms["sign-up"]["email"].value;
+            var phone = document.forms["sign-up"]["phone"].value;
+            var username = document.forms["sign-up"]["username"].value;
+            var password = document.forms["sign-up"]["password"].value;
+            var rePassword = document.forms["sign-up"]["rePassword"].value;
+            var aprobado = 1;
+
+            var paragraph = document.getElementById("errorNombre");
+            paragraph.style.display = "none";
+            if(fullName == "" || fullName.length < 8 || fullName.length > 30 || !fullName.match(/^([A-Za-zÑñÁáÉéÍíÓóÚú]+['\-]{0,1}[A-Za-zÑñÁáÉéÍíÓóÚú]+)(\s+([A-Za-zÑñÁáÉéÍíÓóÚú]+['\-]{0,1}[A-Za-zÑñÁáÉéÍíÓóÚú]+))*$/)){
+                paragraph.textContent = "*La longitud del nombre debe de ser de entre al menos 8 y 30 caracteres y debe de contener unicamente letras";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+            
+            var paragraph = document.getElementById("errorEmail");
+            paragraph.style.display = "none";
+            if(email == "" || email.length < 1 || email.length > 50 || !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+                paragraph.textContent = "*Por favor ingresa un email valido.";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorCelular");
+            paragraph.style.display = "none";
+            if(phone == "" || phone.length < 10 || phone.length > 10 || !phone.match(/^[0-9]+$/)){
+                paragraph.textContent = "*Por favor ingresa un celular valido de 10 dígitos.";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorUsuario");
+            paragraph.style.display = "none";
+            if(username == "" || username.length < 8 || username.length > 20){
+                paragraph.textContent = "*La longitud del usuario debe de ser de entre al menos 8 y 20 caracteres";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorPassword");
+            paragraph.style.display = "none";
+            if(password == "" || password.length < 8 || password.length > 20){
+                paragraph.textContent = "*La longitud de la contraseña debe de ser de entre al menos 8 y 20 caracteres";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorConfirmPassword");
+            paragraph.style.display = "none";
+            if(rePassword != password){
+                paragraph.textContent = "*Las contraseñas ingresadas no coinciden";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            if(aprobado == 0) {
+                return( false );
+            }else if(aprobado == 1) {
+                return( true );
+            }
+            
+            
+            
+        }

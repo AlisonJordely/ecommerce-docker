@@ -1,0 +1,91 @@
+extends info
+
+block details
+    .row
+        h1= "Orden "+ order.OrderID
+
+            
+        .table-responsive.cart_info
+            
+
+            table.content-table
+                thead
+                    tr
+                        td(style='max-width: 120px;').image Imagen
+                        td Producto
+                        td Precio Unitario 
+                        td Cantidad
+                        td Total
+                tbody
+
+                    each product in products
+                        -var quantity = product.Quantity;
+                        -var name = product.ProductName;
+                        -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
+                        -var unitPrice = product.ProductPrice;
+                        -var productTotal = product.Total;
+                        tr
+                            td.cart_product
+                                a(href=productLink)
+                                    img(src=product.Image, alt=name, style='width: 120px; border: none;')
+                            td.cart_description
+                                h4
+                                    a(href=productLink)= name
+                                p= product.Description
+                            td
+                                p(style='color: #85BB65;')= ' $' + unitPrice
+                            td.cart_quantity
+                                p=quantity
+                            td
+                                p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
+
+                    
+            br     
+            table(style='min-width: 50%; float: right;').content-table
+                thead
+                    tr.cart_menu
+                        td(colspan=2) Resumen de compra
+
+                tbody
+                    tr
+                        td Sub Total
+                        td(style='color: #85BB65;')= ' $' + order.SubTotal
+                    tr
+                        td Descuento
+                        td(style='color: red;')= ' $' + order.Discount
+                    tr
+                        td Total
+                        td(style='color: #85BB65;')
+                            span= ' $' + order.Total
+
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+            br
+
+    script(type='text/javascript').
+
+        var fechaInicial = new Date(document.getElementById("fechaButton").value);
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        var fechaFinal = fechaInicial.toLocaleDateString('es-ES', options);
+        var tiempo = (fechaInicial.getHours()+1) + ":" + fechaInicial.getMinutes() + ":" + fechaInicial.getSeconds();
+
+        document.getElementById("fechaH4").textContent += fechaFinal + " a las " + tiempo;
+        //- alert(fechaFinal+tiempo);  
+
+        function mostrarCodigos() {
+            document.getElementById("tablaCodigos").style.display = "block";  
+            document.getElementById("ocultar").style.display = "block"; 
+            document.getElementById("mostrar").style.display = "none";   
+        }
+
+        function ocultarCodigos() {
+            document.getElementById("tablaCodigos").style.display = "none";   
+            document.getElementById("ocultar").style.display = "none"; 
+            document.getElementById("mostrar").style.display = "block";    
+        }

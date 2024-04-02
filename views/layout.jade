@@ -1,0 +1,211 @@
+doctype html
+html
+    head
+        //metadata
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        meta(name='description', content='Ecommerce')
+        meta(name='author', content='Ecommerce. Todos los Derechos Reservados')
+        //title
+        title=  'Ecommerce | ' + title
+        //stylesheet
+        link(rel='stylesheet', href='/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/css/font-awesome.min.css')
+        link(rel='stylesheet', href='/css/main.css')
+        //favicon
+        link(rel='shortcut icon', href='/img/ecommerce.png')
+        link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/img/ico/apple-touch-icon-144-precomposed.png')
+        link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/img/ico/apple-touch-icon-114-precomposed.png')
+        link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/img/ico/apple-touch-icon-72-precomposed.png')
+        link(rel='apple-touch-icon-precomposed', href='/img/ico/apple-touch-icon-57-precomposed.png')
+    body
+        //header
+        header#header
+               
+        
+            .headerxd
+                a(href='/')
+                    img(src='/img/ecommerce4.png', alt='Ecommerce Logo')
+
+                a 
+
+                        .header-center
+                            form(id='sign-in', action='/cat/buscar', method='POST')
+                                input.search-input(type='text', name='buscador', value=buscador, placeholder='Buscar', style="color: black;", class="searchTerm")
+                                button(type='submit', class="searchButton")
+                                    i.fa.fa-search
+
+
+                .header-right
+
+                    a(class={active: currentUrl === '/'}, href='/') 
+                        i.fa.fa-home
+                        |      Inicio
+                    a(class={active: currentUrl === '/cat/all'}, href='/cat/all') 
+                        i.fa.fa-mobile
+                        |      Productos
+                    //- if (customer && customer.Admin != 1) || !customer
+                    a(class={active: currentUrl === '/cart'}, href='/cart')
+                        i.fa.fa-shopping-cart
+                        |       Carrito
+                    a(class={active: currentUrl === '/wishlist'}, href='/wishlist')
+                        i.fa.fa-heart
+                        |       Lista de Deseos
+                    -var orderCus = '             Iniciar Sesión'
+                    -var link = '/sign-in'
+                    if customer
+                        -orderCus="     " + customer.FullName
+                        -link='/usr/'
+                    a(class={active: currentUrl === link}, href=link)
+                        i.fa.fa-user
+                        =orderCus
+                    if customer
+                        a(href='/sign-out')
+                            i.fa.fa-sign-out
+                            |    Logout
+                    //- a(class={active: currentUrl === '/contact-us'}, href='/contact-us') Contacto
+
+            
+
+            ///header-bottom
+        ///header
+
+        
+
+        block content
+
+
+        //Footer
+        footer#footer
+            //.footer-top
+            //    .container
+            //        .row
+            //            .col-sm-3
+            //                .single-promo.promo1
+            //                    i.fa.fa-refresh
+            //                    p 30 Days return
+            //            .col-sm-3
+            //                .single-promo.promo2
+            //                    i.fa.fa-truck
+            //                    p Free shipping
+            //            .col-sm-3
+            //                .single-promo.promo3
+            //                    i.fa.fa-lock
+            //                    p Secure payments
+            //            .col-sm-3
+            //                .single-promo.promo4
+            //                    i.fa.fa-gift
+            //                    p Surprising Gift
+            
+        ///Footer
+    script(src='https://js.stripe.com/v3/')
+    script(src='/js/jquery-2.1.4.min.js')
+    script(src='/js/bootstrap.min.js')
+    script(src='/js/jquery.scrollUp.min.js')
+    script(src='/js/main.js')
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+        const form = document.getElementById('myForm');
+        const messageContainer = document.getElementById('messageContainer');
+        const chatContainer = document.getElementById('chatContainer');
+        const chatToggle = document.getElementById('chatToggle');
+
+        const bienvenida = "¡Hola! soy el asistente virtual de Ecommerce y estoy aquí para apoyarte en tu recorrido dentro"
+        + " de nuestra página, puedes preguntarme cualquier cosa relacionada con la página y con gusto te responderé con "
+        + "la información existente";
+
+        const assistantMessage = createMessageElement(bienvenida, 'assistant');
+        messageContainer.appendChild(assistantMessage);
+
+        form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const text = formData.get('textInput');
+
+        const userMessage = createMessageElement(text, 'user');
+        messageContainer.appendChild(userMessage);
+        // Limpiar campo de texto después de enviar el mensaje
+        form.reset();
+
+        const response = await fetch('/process', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text })
+        });
+
+        const data = await response.json();
+
+        const assistantMessage = createMessageElement(data.result, 'assistant');
+        messageContainer.appendChild(assistantMessage);
+
+        // Scroll automático hacia el último mensaje
+        userMessage.scrollIntoView({ behavior: 'smooth' });
+        assistantMessage.scrollIntoView({ behavior: 'smooth' });
+
+        
+        });
+
+        //- function createMessageElement(text, sender) {
+        //- const messageElement = document.createElement('div');
+        //- messageElement.textContent = text;
+        //- messageElement.classList.add(sender === 'user' ? 'userMessage' : 'assistantMessage');
+        //- return messageElement;
+        //- }
+
+
+        function createMessageElement(text, sender) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add(sender === 'user' ? 'userMessage' : 'assistantMessage');
+
+        // Buscar enlaces dentro del texto
+        const regex = /(\bhttps?:\/\/\S+\b)/gi;
+        const matches = text.match(regex);
+
+        if (matches) {
+            // Dividir el texto en partes: texto regular y enlaces
+            const parts = text.split(regex);
+
+            parts.forEach((part) => {
+            if (part.match(regex)) {
+                // Es un enlace, envolverlo en un <span> con margen inferior
+                const linkSpan = document.createElement('span');
+                linkSpan.style.marginBottom = '10px';
+
+                const link = document.createElement('a');
+                link.href = part;
+                link.textContent = part;
+                linkSpan.appendChild(link);
+
+                messageElement.appendChild(linkSpan);
+            } else {
+                // Es texto regular, agregarlo directamente al mensaje
+                const textNode = document.createTextNode(part);
+                messageElement.appendChild(textNode);
+            }
+            });
+        } else {
+            // No hay enlaces, agregar el texto completo al mensaje
+            messageElement.textContent = text;
+        }
+
+        return messageElement;
+        }
+
+
+        messageContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target.tagName === 'A') {
+            event.preventDefault();
+            window.open(target.href, '_self');
+        }
+        });
+
+
+        chatToggle.addEventListener('click', () => {
+        chatContainer.style.display = chatContainer.style.display === 'none' ? 'flex' : 'none';
+        });
+
+

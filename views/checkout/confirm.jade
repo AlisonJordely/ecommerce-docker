@@ -1,0 +1,72 @@
+extends ../layout
+
+block content
+    section#cart_items
+        .container
+            
+            .row
+                .col-sm-8
+                    .table-responsive.cart_info
+                
+
+                table.content-table
+                    thead
+                        tr
+                            td(colspan=6, style='text-align: center; align-items: center;')
+                                h1(style='color: white;')= 'Orden ' + order.OrderID + ' finalizada'
+                                h1(style='color: white;')= '\nPuedes visualizar el estatus de tu orden en el apartado Ordenes dentro de tu perfil'
+                                    form(action='/usr/' + customer.Username + '/orders/' + order.OrderID, method='GET')
+                                        button.btn.btn-default.order-btn(type='submit' class="btn btn-link", style="background: white;")
+                                            i.fa.fa-eye
+                                            = ' Detalle de orden'
+                                
+                        tr
+                            td(style='max-width: 120px;').image Imagen
+                            td Producto
+                            td Precio Unitario 
+                            td Cantidad
+                            td Total
+
+                    tbody
+
+                        each product in products
+                            -var quantity = product.Quantity;
+                            -var name = product.ProductName;
+                            -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
+                            -var unitPrice = product.ProductPrice;
+                            -var productTotal = product.Total;
+                            tr
+                                td.cart_product
+                                    a(href=productLink)
+                                        img(src=product.Image, alt=name, style='width: 120px; border: none;')
+                                td.cart_description
+                                    h4
+                                        a(href=productLink)= name
+                                    p= product.Description
+                                td
+                                    p(style='color: #85BB65;')= ' $' + unitPrice
+                                td.cart_quantity
+                                    p=quantity
+                                td
+                                    p(style='color: #85BB65; font-weight: 1000;').cart_total_price= ' $' + productTotal
+
+                
+                br
+                table(style='min-width: 50%; float: right;').content-table
+                    thead
+                        tr.cart_menu
+                            td(colspan=2) Resumen de compra
+
+                    tbody
+                        tr
+                            td Sub Total
+                            td(style='color: #85BB65;')= ' $' + order.SubTotal
+                        tr
+                            td Descuento
+                            td(style='color: red;')= ' $' + order.Discount
+                        tr
+                            td Total
+                            td(style='color: #85BB65;')
+                                span= ' $' + order.Total
+
+        br

@@ -1,0 +1,107 @@
+extends info
+
+block details
+    section#form
+        //form
+
+        .container
+
+            if checkOutNoti
+                if (signUpError != '')
+                    p=signUpError+"xd1"
+                else
+                    p=checkOutNoti+"xd2"
+            else
+                if (signUpError != '')
+                    p(id="MessageError", value=signUpError, style="display: none;")=signUpError
+
+            .center-login
+                h1 Editar Información
+
+                form(id='editProfile', action='/usr/' + customer.Username + '/edit', method='POST', onsubmit = "return(validate());")
+                    .txt_field
+                        input(type='text', id='fullname', name='fullName', value=customer.FullName)
+                        span
+                        label Nombre completo
+                    p(id="errorNombre" style="color: #d9534f; display: none;")
+                    .txt_field
+                        input(type='email', id='email', name='email', value=customer.Email)
+                        span
+                        label Correo electronico
+                    p(id="errorEmail" style="color: #d9534f; display: none;")
+                    .txt_field
+                        input(type='tel', id='phone', name='phone', value=customer.Phone)
+                        span
+                        label Celular
+                    p(id="errorCelular" style="color: #d9534f; display: none;")
+                    .txt_field
+                        input(type='password', id='password', name='password')
+                        span
+                        label Confirmar contraseña para guardar cambios
+                    p(id="errorPassword" style="color: #d9534f; display: none;")
+                    input(type='submit', value='Actualizar perfil')
+                br
+                    
+       
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@9")
+    script(type='text/javascript').
+
+        //- alert errores
+        var MessageError = document.getElementById("MessageError").textContent;
+        console.log(document.getElementById("MessageError").textContent); 
+        if (MessageError != ''){
+            Swal.fire({icon: 'warning',
+                        title: 'Datos invalidos',
+                        text: MessageError,
+                        confirmButtonColor: '#005A9C'});
+        }
+
+
+        // validacion de form
+        function validate() {
+            
+            var fullName = document.forms["editProfile"]["fullName"].value;
+            var email = document.forms["editProfile"]["email"].value;
+            var phone = document.forms["editProfile"]["phone"].value;
+            var password = document.forms["editProfile"]["password"].value;
+            var aprobado = 1;
+
+            var paragraph = document.getElementById("errorNombre");
+            paragraph.style.display = "none";
+            if(fullName == "" || fullName.length < 8 || fullName.length > 30 || !fullName.match(/^([A-Za-zÑñÁáÉéÍíÓóÚú]+['\-]{0,1}[A-Za-zÑñÁáÉéÍíÓóÚú]+)(\s+([A-Za-zÑñÁáÉéÍíÓóÚú]+['\-]{0,1}[A-Za-zÑñÁáÉéÍíÓóÚú]+))*$/)){
+                paragraph.textContent = "*La longitud del nombre debe de ser de entre al menos 8 y 30 caracteres y debe de contener unicamente letras";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+            
+            var paragraph = document.getElementById("errorEmail");
+            paragraph.style.display = "none";
+            if(email == "" || email.length < 1 || email.length > 50 || !email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)){
+                paragraph.textContent = "*Por favor ingresa un email valido.";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorCelular");
+            paragraph.style.display = "none";
+            if(phone == "" || phone.length < 10 || phone.length > 10 || !phone.match(/^[0-9]+$/)){
+                paragraph.textContent = "*Por favor ingresa un celular valido de 10 dígitos.";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+            var paragraph = document.getElementById("errorPassword");
+            paragraph.style.display = "none";
+            if(password == "" || password.length < 1 || password.length > 20){
+                paragraph.textContent = "*Por favor ingresa tu contraseña para confirmar esta operación (longitud de minimo 8 y máximo 20 caracteres)";
+                paragraph.style.display = "block"; 
+                aprobado = 0;
+            }
+
+
+            if(aprobado == 0) {
+                return( false );
+            }else if(aprobado == 1) {
+                return( true );
+            }
+        }

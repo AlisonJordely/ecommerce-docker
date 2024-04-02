@@ -1,0 +1,56 @@
+extends layout
+
+block content
+
+    h2.title.text-center
+                    | Lista de deseos
+
+    table.content-table
+      thead
+        tr
+            td Imagen
+            td Producto        
+            td Precio
+            td Acciones
+      tbody
+            if (wishlist < 1)
+                tr
+                    td(colspan="4", style="text-align: center;")
+                        p= "No se encontraron Productos en la Lista de Deseos"
+                        a(class={active: currentUrl === '/'}, href='/')
+                                            | Explorar Productos
+            else
+                each product in wishlist
+                    -var quantity = product.quantity;
+                    -var name = product.ProductName;
+                    -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug + '/' + product.ProductID;
+                    -var unitPrice = product.ProductPrice;
+                    -var productTotal = product.productTotal;
+                    -var id = product.ProductID;
+                    tr
+                        td.cart_product
+                            a(href=productLink)
+                                img(src=product.Image, alt=name)
+                        td.cart_description
+                            h4
+                                a(href=productLink)= name
+                            p= product.Description
+                        td(style='color: #85BB65;').cart_total
+                            p.cart_total_price= ' $' + unitPrice
+                        td.cart_delete
+
+                            //- form(action='/cart/' + id + '/add', method='POST')
+                            //-     button.btn.btn-default(type='submit' class="btn btn-primary")
+                            //-         i.fa.fa-shopping-cart
+                            //-         |          Añadir al Carrito
+
+                            form(action='/cart/' + id + '/buy-directly', method='POST')
+                                input(type='number', name='quantity',id="xd4", value='1', min="1", max="1", style="display: none;")
+                                button.btn.btn-default(type='submit', style="width: 150px;" class="btn btn-primary")
+                                    i.fa.fa-arrow-right
+                                    |          Comprar ahora  
+
+                            form(action='/wishlist/' + id + '/delete', method='POST')
+                                button.btn.btn-default(type='submit' class="btn btn-danger")
+                                    i.fa.fa-trash-o
+                                    = ' Eliminar'

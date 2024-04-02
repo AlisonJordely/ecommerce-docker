@@ -1,0 +1,54 @@
+extends admin
+
+block details
+
+    table.content-table
+        thead
+            tr
+                th(colspan='5') Historial de Ordenes
+        thead
+            tr
+                td ID Orden
+                td Fecha
+                td Total
+                td    
+
+        tbody
+            each order in orders
+                tr
+                    td= order.OrderID
+                    td  
+                        p(id=order.OrderDate)= order.OrderDate
+                        input(name="buttonDate" value=order.OrderDate style="display: none;")
+                    td(style='color: #85BB65;')= ' $' + order.Total
+                    td
+                        form.dev-form(action='/admin/orders/' + order.OrderID, method='GET')
+                            button.btn.btn-default.order-btn(type='submit' class="btn btn-link")
+                                i.fa.fa-eye
+                                = ' Detalle de orden'
+
+
+                        //- form.dev-form(action='/admin/orders/' + order.OrderID + '/update', method='GET')
+                        //-     button.order-btn.btn.btn-default(type='submit', class="btn btn-info")
+                        //-         i.fa.fa-list
+                        //-         = ' Actualizar  Estatus'
+
+
+    script(type='text/javascript').
+
+        let elements = document.getElementsByName("buttonDate");
+        let num = document.getElementsByName("buttonDate").length;
+
+        let str = '';
+
+        for (let i = 0; i < num; i++) {
+            element = elements[i].value;
+
+            var fechaInicial = new Date(element);
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var fechaFinal = fechaInicial.toLocaleDateString('es-ES', options);
+            var tiempo = (fechaInicial.getHours()+1) + ":" + fechaInicial.getMinutes() + ":" + fechaInicial.getSeconds();
+
+            document.getElementById(element).textContent = fechaFinal + " a las " + tiempo;
+        }
+

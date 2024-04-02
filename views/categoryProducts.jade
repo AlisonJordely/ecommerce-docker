@@ -1,0 +1,47 @@
+extends layout
+
+block content
+    section
+        h2.title.text-center
+                            = title
+        .container
+            .row
+                .col-sm-2
+                    // nav-bar
+                    .left-sidebar
+                        #accordian.panel-group.category-products
+                            .panel.panel-default
+                                .panel-heading
+                                    h4.panel-title
+                                        a(href='/cat/all') Todos los Productos
+                            h2
+                            each category in categories
+                                .panel.panel-default
+                                    .panel-heading
+                                        h4.panel-title
+                                            a(href='/cat/' + category.CategorySlug)= category.CategoryName
+                    ///nav-bar
+                // category_products
+                .col-sm-10
+                    .features_items
+                        if products
+                            each product in products
+                                - var productUrl = '/cat/' + product.CategorySlug + '/' + product.ProductSlug+ '/' + product.ProductID;
+                                .col-sm-4
+                                    .product-image-wrapper
+                                        .single-products
+                                            .productinfo.text-center
+                                                a.referenciaProducto(href=productUrl)  
+                                                    figure
+                                                        img(src=product.Image, alt=product.ProductName)
+                                                        figcaption= product.ProductName
+                                                p
+                                                    a(href=productUrl)=product.ProductName
+                                                h2= ' MX$' + product.ProductPrice
+
+                        
+                
+
+                
+                                                
+            ///category_products

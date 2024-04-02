@@ -1,0 +1,56 @@
+extends admin
+
+block details
+
+    .center-login
+        h1 Añadir nuevo Producto
+        form(id='addProduct', action='/admin/products/add', method='POST')
+            .txt_field
+                input(type='text', id='name', name='name', required=true)
+                span
+                label Nombre del Producto 
+            .radio_field
+                span
+                label Categoría
+                select(id='category', name='category')
+                    each category in categories
+                        option(value=category.CategoryID)= category.CategoryName
+            .txt_field
+                input(type='text', id='price', name='price', required=true)
+                span
+                label Precio del Producto 
+            .txt_field
+                input(type='text', id='unit', name='unit', required=true)
+                span
+                label Unidades en Stock
+            .txt_field
+                input(type='text', id='description', name='description', required=true)
+                span
+                label Descripción del Producto 
+            .txt_field
+                input(type='text', id='year', name='year', required=true)
+                span
+                label Año de lanzamiento del Producto 
+            .txt_field
+                input(type='text', id='image', name='image', required=true)
+                span
+                label Imagen de la categoría
+            .radio_field
+                span
+                label Mostrar Producto como disponible
+                
+                input(type='radio', id='featureYes', name='feature', value=1)
+                label(for='featureYes') Si
+                
+                
+                input(type='radio', id='featureNo', name='feature', value=0)
+                label(for='featureNo') No
+
+                br
+            input(type='submit', value='Añadir Producto')
+            br
+            br
+    br
+    br
+
+

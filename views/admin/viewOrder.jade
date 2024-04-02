@@ -1,0 +1,73 @@
+extends admin
+
+block details
+    .row
+        h1= "Orden "+ order.OrderID
+        .table-responsive.cart_info
+            table.content-table
+                thead
+                    tr.cart_menu
+                        td(colspan=2) Información del cliente
+                tbody
+                    tr
+                        td Nombre
+                        td= orderCustomer.FullName
+                    tr
+                        td Email
+                        td= orderCustomer.Email
+                    tr
+                        td Celular
+                        td= orderCustomer.Phone
+
+
+    .row
+        h3 Resumen de compra
+        .table-responsive.cart_info
+            table.content-table
+                thead
+                    tr.cart_menu
+                        td.image
+                        td.description Producto
+                        td.price Precio Unitario
+                        td.quantity Cantidad
+                        td.total Total
+                tbody
+                    each product in products
+                        -var quantity = product.Quantity;
+                        -var name = product.ProductName;
+                        -var productLink = '/cat/' + product.CategorySlug + '/' + product.ProductSlug;
+                        -var unitPrice = product.ProductPrice;
+                        -var productTotal = product.Total;
+                        tr
+                            td.cart_product
+                                a(href=productLink)
+                                    img(src=product.Image, alt=name)
+                            td.cart_description
+                                h4
+                                    a(href=productLink)= name
+                                p= product.Description
+                            td.cart_price
+                                p= ' $' + unitPrice
+                            td.cart_quantity
+                                p=quantity
+                            td.cart_total
+                                p.cart_total_price= ' $' + productTotal
+
+            br                    
+            table(style='min-width: 50%; float: right;').content-table
+                thead
+                    tr.cart_menu
+                        td(colspan=2) Resumen de compra
+
+                tbody
+                    tr
+                        td Sub Total
+                        td(style='color: #85BB65;')= ' $' + order.SubTotal
+                    tr
+                        td Descuento
+                        td(style='color: red;')= ' $' + order.Discount
+                    tr
+                        td Total
+                        td(style='color: #85BB65;')
+                            span= ' $' + order.Total
+    br

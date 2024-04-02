@@ -1,0 +1,89 @@
+extends layout
+
+block content
+
+
+    h2.title.text-center
+        i.fa.fa-shopping-cart
+        |     Carrito de compras
+
+
+    
+    table.content-table
+      thead
+        tr
+            td Imagen
+            td Productos
+            td Precio Unitario
+            td Cantidad
+            td Total
+            td Acciones
+      tbody
+            if (cart < 1)
+                tr
+                    td
+                    td(colspan="4", style="text-align: center;")
+                        p= "No se encontraron Productos en el carrito"
+                        a(class={active: currentUrl === '/'}, href='/') 
+                                            | Explorar Productos
+            else
+                each item in cart
+                    -var quantity = item.quantity;
+                    -var name = item.ProductName;
+                    -var productLink = '/cat/' + item.CategorySlug + '/' + item.ProductSlug + '/' + item.ProductID;
+                    -var unitPrice = item.ProductPrice;
+                    -var productTotal = item.productTotal;
+                    -var id = item.ProductID;
+                    tr
+                        td.cart_product
+                            a(href=productLink)
+                                img(src=item.Image, alt=name)
+                        td.cart_description
+                            h4
+                                a(href=productLink)= name
+                            p= item.Description
+                        td(style='color: #85BB65;').cart_price
+                            p= ' $' + unitPrice
+                        td.cart_quantity
+                            .cart_quantity_button
+                                form(action='/cart/' + id + '/update', method='POST')
+                                    //- onchange="this.form.submit()",
+                                    input.cart_quantity_input(type='number', name=id, value=quantity, autocomplete='off', size='2', min="1", max=item.UnitsInStock)
+                        td(style='color: #85BB65;').cart_total
+                            p.cart_total_price= ' $' + productTotal
+                        td.cart_delete
+                            form(action='/cart/' + id + '/delete', method='POST')
+                                button.btn.btn-default(type='submit' class="btn btn-danger")
+                                    i.fa.fa-trash-o
+                                    = ' Eliminar'
+
+
+
+
+    section#cart_items
+        .container
+            .row
+                .table-responsive.cart_info
+                    
+                    if (summary != null)
+                        if (summary.total > 0)
+                        
+                                table.table.table-condensed.total-result
+                                    thead
+                                        tr.cart_menu
+                                            td(colspan=2) Resumen
+
+                                    tbody
+                                        tr
+                                            td Sub Total
+                                            td(style='color: #85BB65;')= ' $' + summary.subTotal
+                                        tr
+                                            td Descuento
+                                            td(style='color: red;')= ' $' + summary.discount
+                                        tr
+                                            td Total
+                                            td
+                                                span= ' $' + summary.total
+                                        tr
+                                            td(colspan=2).text-right
+                                                a.add-to-cart(href='/checkout/review/') Comprar
